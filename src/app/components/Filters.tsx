@@ -1,22 +1,15 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { GET_GENRES } from '../lib/queries/animeQueries';
 
-// Consulta para obtener los géneros
-const GET_GENRES = gql`
-  query GetGenres {
-    GenreCollection
-  }
-`;
+// Importar enumeraciones
+import { MEDIA_STATUS, MEDIA_SEASON } from '../lib/enums/mediaEnums';
+import { getYears } from '../lib/utils/utils';
 
-// Enumeraciones para Estado de Emisión y Temporada de Emisión
-const MEDIA_STATUS = ['FINISHED', 'RELEASING', 'NOT_YET_RELEASED', 'CANCELLED', 'HIATUS'];
-const MEDIA_SEASON = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
-
-// Generar años desde 2000 hasta el año actual
-const currentYear = new Date().getFullYear();
-const YEARS = Array.from({ length: currentYear - 1999 }, (_, i) => 2000 + i).reverse();
+// Obtener la lista de años
+const YEARS = getYears();
 
 const Filters = () => {
     const searchParams = useSearchParams();
@@ -135,9 +128,9 @@ const Filters = () => {
                 onChange={(e) => setStatus(e.target.value)}
             >
                 <option value="">Airing Status</option>
-                {MEDIA_STATUS.map((status) => (
-                <option key={status} value={status}>
-                    {status}
+                {MEDIA_STATUS.map(({ name, value }) => (
+                <option key={value} value={value}>
+                    {name}
                 </option>
                 ))}
             </select>
@@ -156,7 +149,7 @@ const Filters = () => {
             </select>
 
             {/* Botón de búsqueda */}
-            <button onClick={handleSearch}>Buscar</button>
+            <button onClick={handleSearch}>Search</button>
 
             {/* Mostrar filtros seleccionados */}
             <div className="flex flex-wrap gap-2">
@@ -208,10 +201,10 @@ const Filters = () => {
                 <div className="text-white">
                     <span>Season: {season}</span>
                     <button
-                    onClick={() => handleClearFilter('season')}
-                    className="ml-2 text-red-500 hover:text-red-700"
-                    >
-                    &times;
+                        onClick={() => handleClearFilter('season')}
+                        className="ml-2 text-red-500 hover:text-red-700"
+                        >
+                        &times;
                     </button>
                 </div>
                 )}

@@ -8,17 +8,17 @@ const Navbar = () => {
         {/* Logo */}
         <Link href="/">
           <div className="flex items-center">
-            <span className="text-white text-xl font-bold ml-2">AnimeApp</span>
+            <span className="text-white text-xl font-bold ml-2">Aninex</span>
           </div>
         </Link>
 
         {/* Enlaces de navegación */}
         <div className="flex space-x-4">
           <Link href="/">
-            <span className="text-white hover:text-gray-300">Inicio</span>
+            <span className="text-white hover:text-gray-300">Home</span>
           </Link>
           <Link href="/favorites">
-            <span className="text-white hover:text-gray-300">Favoritos</span>
+            <span className="text-white hover:text-gray-300">Favorites</span>
           </Link>
         </div>
       </div>

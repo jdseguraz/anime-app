@@ -1,45 +1,10 @@
 'use client';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import AnimeCard from '@/app/components/AnimeCard';
 import { useEffect, useState } from 'react'; // Importa useEffect y useState
-
-// Consulta para obtener los animes favoritos
-const GET_FAVORITE_ANIMES = gql`
-  query GetFavoriteAnimes($ids: [Int!]) {
-    Page(page: 1, perPage: 50) {
-      media(id_in: $ids, type: ANIME, isAdult: false) {
-        id
-        coverImage {
-          extraLarge
-        }
-        title {
-          english
-          native
-        }
-        description
-        episodes
-        popularity
-        status
-        startDate {
-          year
-          month
-          day
-        }
-        endDate {
-          year
-          month
-          day
-        }
-        trailer {
-          id
-          site
-        }
-      }
-    }
-  }
-`;
+import { GET_FAVORITE_ANIMES } from '@/app/lib/queries/animeQueries';
 
 export default function FavoritesPage() {
   const [isClient, setIsClient] = useState(false);
@@ -68,7 +33,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="p-10 p-md-30">
-      <h1 className="text-2xl font-bold mb-4">Tus Favoritos</h1>
+      <h1 className="text-2xl font-bold mb-4">Your favorites</h1>
 
       {favoriteAnimes.length > 0 ? (
         <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">

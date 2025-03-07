@@ -1,108 +1,24 @@
 'use client';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { gql, useQuery } from '@apollo/client';
-import { useSelector, useDispatch } from 'react-redux';
-import { toggleFavorite } from '../store/slices/favoritesSlices';
+import { useQuery } from '@apollo/client';
+import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+
+/* Consultas GraphQL */
+import { GET_ANIMES, GET_POPULAR_THIS_SEASON, GET_POPULAR_ALL_TIME } from '../lib/queries/animeQueries';
 
 /* componentes */
 import Filters from '../components/Filters';
 import AnimeCard from '../components/AnimeCard';
 import AnimeModal from '../components/AnimeModal';
 
-
-// Función para obtener la temporada actual
-const getCurrentSeason = () => {
-  const date = new Date();
-  const month = date.getMonth() + 1; // getMonth() devuelve 0-11
-  const year = date.getFullYear();
-
-  let season;
-  if (month >= 3 && month <= 5) season = 'SPRING';
-  else if (month >= 6 && month <= 8) season = 'SUMMER';
-  else if (month >= 9 && month <= 11) season = 'FALL';
-  else season = 'WINTER';
-
-  return { season, year };
-};
-
-// Consulta para animes filtrados
-const GET_ANIMES = gql`
-  query GetAnimes($search: String, $genre: String, $year: Int, $status: MediaStatus, $season: MediaSeason) {
-    Page(page: 1, perPage: 10) {
-      media(
-        type: ANIME
-        isAdult: false
-        search: $search
-        genre: $genre
-        seasonYear: $year
-        status: $status
-        season: $season
-      ) {
-        id
-        coverImage {
-          extraLarge
-        }
-        title {
-          english
-          native
-        }
-      }
-    }
-  }
-`;
-
-// Consulta para animes populares de esta temporada
-const GET_POPULAR_THIS_SEASON = gql`
-  query GetPopularThisSeason($season: MediaSeason, $year: Int) {
-    Page(page: 1, perPage: 6) {
-      media(
-        type: ANIME
-        isAdult: false
-        season: $season
-        seasonYear: $year
-        sort: POPULARITY_DESC
-      ) {
-        id
-        coverImage {
-          extraLarge
-        }
-        title {
-          english
-          native
-        }
-      }
-    }
-  }
-`;
-
-// Consulta para animes populares de todos los tiempos
-const GET_POPULAR_ALL_TIME = gql`
-  query GetPopularAllTime {
-    Page(page: 1, perPage: 6) {
-      media(
-        type: ANIME
-        isAdult: false
-        sort: POPULARITY_DESC
-      ) {
-        id
-        coverImage {
-          extraLarge
-        }
-        title {
-          english
-          native
-        }
-      }
-    }
-  }
-`;
+/* utils */
+import { getCurrentSeason } from '../lib/utils/utils';
 
 export default function Home() {
   const searchParams = useSearchParams();
 
-  const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.favorites.favorites);
 
   const search = searchParams.get('search');
@@ -144,19 +60,12 @@ export default function Home() {
 
   // Función para abrir el modal
   const handleOpenModal = (anime: number) => {
-    console.log('abriendo modal');
-    console.log(anime);
     setSelectedAnimeId(anime);
   };
 
   // Función para cerrar el modal
   const handleCloseModal = () => {
     setSelectedAnimeId(null);
-  };
-
-  // Función para agregar/quitar de favoritos
-  const handleToggleFavorite = (animeId: number) => {
-    dispatch(toggleFavorite(animeId));
   };
 
   return (
@@ -169,9 +78,9 @@ export default function Home() {
           {/* Mostrar resultados filtrados si hay filtros */}
           {(search || genre || year || status || season) && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Resultados Filtrados</h2>
+              <h2 className="text-2xl font-bold mb-4">Results:</h2>
               {filteredData?.Page.media.length === 0 ? ( // Verificar si no hay resultados
-                <p className="text-gray-600">No se encontraron coincidencias.</p>
+                <p className="text-gray-600">No Results for your filters</p>
               ) : (
                 <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                   {filteredData?.Page.media.map((anime) => (
@@ -187,7 +96,7 @@ export default function Home() {
           {/* Mostrar animes populares de esta temporada si no hay filtros */}
           {showInitialLoad && (
             <div className="mt-8">
-              <h2 className="text-2xl font-bold mb-4">Popular esta temporada ({currentSeason} {currentYear})</h2>
+              <h2 className="text-2xl font-bold mb-4">POPULAR THIS SEASON ({currentSeason} {currentYear})</h2>
               <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                 {popularThisSeasonData?.Page.media.map((anime) => (
                   <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
@@ -201,7 +110,7 @@ export default function Home() {
           {/* Mostrar animes populares de todos los tiempos si no hay filtros */}
           {showInitialLoad && (
             <div className="mt-8">
-              <h2 className="text-2xl font-bold mb-4">Popular todos los tiempos</h2>
+              <h2 className="text-2xl font-bold mb-4">ALL TIME POPULAR </h2>
               <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                 {popularAllTimeData?.Page.media.map((anime) => (
                   <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>

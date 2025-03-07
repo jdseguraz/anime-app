@@ -1,9 +1,6 @@
 'use client';
-
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toggleFavorite } from '../store/slices/favoritesSlices';
-import { RootState } from '../store/store';
 
 interface AnimeCardProps {
   anime: {
