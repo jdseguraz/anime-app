@@ -1,8 +1,16 @@
 'use client';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { gql, useQuery } from '@apollo/client';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleFavorite } from '../store/slices/favoritesSlices';
+import { RootState } from '../store/store';
+
+/* componentes */
 import Filters from '../components/Filters';
 import AnimeCard from '../components/AnimeCard';
+import AnimeModal from '../components/AnimeModal';
+
 
 // Función para obtener la temporada actual
 const getCurrentSeason = () => {
@@ -94,11 +102,17 @@ const GET_POPULAR_ALL_TIME = gql`
 export default function Home() {
   const searchParams = useSearchParams();
 
+  const dispatch = useDispatch();
+  const favorites = useSelector((state: RootState) => state.favorites.favorites);
+
   const search = searchParams.get('search');
   const genre = searchParams.get('genre');
   const year = searchParams.get('year');
   const status = searchParams.get('status');
   const season = searchParams.get('season');
+
+  // Estado para el modal
+  const [selectedAnimeId, setSelectedAnimeId] = useState<null | any>(null);
 
   // Obtener la temporada y el año actuales
   const { season: currentSeason, year: currentYear } = getCurrentSeason();
@@ -128,6 +142,23 @@ export default function Home() {
   // Mostrar carga inicial si no hay filtros
   const showInitialLoad = !search && !genre && !year && !status && !season;
 
+  // Función para abrir el modal
+  const handleOpenModal = (anime: number) => {
+    console.log('abriendo modal');
+    console.log(anime);
+    setSelectedAnimeId(anime);
+  };
+
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    setSelectedAnimeId(null);
+  };
+
+  // Función para agregar/quitar de favoritos
+  const handleToggleFavorite = (animeId: number) => {
+    dispatch(toggleFavorite(animeId));
+  };
+
   return (
     <div className="p-10 p-md-30">
       <Filters />
@@ -144,7 +175,9 @@ export default function Home() {
               ) : (
                 <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                   {filteredData?.Page.media.map((anime) => (
-                    <AnimeCard key={anime.id} anime={anime} />
+                    <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
+                      <AnimeCard key={anime.id} anime={anime} isFavorite={favorites.includes(anime.id)} />
+                    </li>
                   ))}
                 </ul>
               )}
@@ -157,7 +190,9 @@ export default function Home() {
               <h2 className="text-2xl font-bold mb-4">Popular esta temporada ({currentSeason} {currentYear})</h2>
               <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                 {popularThisSeasonData?.Page.media.map((anime) => (
-                  <AnimeCard key={anime.id} anime={anime} />
+                  <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
+                    <AnimeCard key={anime.id} anime={anime} isFavorite={favorites.includes(anime.id)} />
+                  </li>
                 ))}
               </ul>
             </div>
@@ -169,10 +204,20 @@ export default function Home() {
               <h2 className="text-2xl font-bold mb-4">Popular todos los tiempos</h2>
               <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                 {popularAllTimeData?.Page.media.map((anime) => (
-                  <AnimeCard key={anime.id} anime={anime} />
+                  <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
+                    <AnimeCard key={anime.id} anime={anime} isFavorite={favorites.includes(anime.id)} />
+                  </li>
                 ))}
               </ul>
             </div>
+          )}
+
+          {/* Modal */}
+          {selectedAnimeId && (
+            <AnimeModal
+              animeId={selectedAnimeId} // Solo pasamos el ID
+              onClose={handleCloseModal}
+            />
           )}
         </>
       )}

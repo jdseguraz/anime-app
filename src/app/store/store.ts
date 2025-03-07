@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import animeReducer from './slices/animeSlice';
+import favoritesReducer from './slices/favoritesSlices';
 
 export const store = configureStore({
   reducer: {
-    anime: animeReducer,
+    favorites: favoritesReducer,
   },
 });
 
