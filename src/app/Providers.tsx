@@ -11,8 +11,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <ApolloProvider client={client}>
       <Provider store={store}>
         <Navbar/>
-        {children}
-        <FloatingButton/>
+        <div className='px-0 lg:px-40'>
+          {children}
+          <FloatingButton/>
+        </div>
       </Provider>
     </ApolloProvider>
   );

@@ -86,7 +86,7 @@ const Filters = () => {
     };
 
     return (
-        <div className="flex flex-col space-y-4">
+        <div className="flex space-y-4">
             {/* Campo de búsqueda */}
             <input
                 type="text"
