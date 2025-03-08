@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useQuery } from '@apollo/client';
 import { GET_GENRES } from '../lib/queries/animeQueries';
+import { FaSearch } from 'react-icons/fa';
 
 // Importar enumeraciones
 import { MEDIA_STATUS, MEDIA_SEASON } from '../lib/enums/mediaEnums';
@@ -84,132 +85,179 @@ const Filters = () => {
                 break;
         }
     };
+    
+    // Función para limpiar todos los filtros
+    const handleClearAll = () => {
+        setSearch('');
+        setGenre('');
+        setYear('');
+        setStatus('');
+        setSeason('');
+        
+        // Actualizar URL sin parámetros
+        router.replace(pathname);
+    };
 
     return (
-        <div className="flex space-y-4">
-            {/* Campo de búsqueda */}
-            <input
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            />
+        <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+            <div className="flex flex-col md:flex-row md:items-center gap-3 mb-4">
+                {/* Campo de búsqueda */}
+                <div className="relative flex-grow">
+                    <input
+                        type="text"
+                        placeholder="Search anime..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                        className="w-full pl-4 pr-10 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    />
+                    <button 
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                        onClick={handleSearch}
+                    >
+                        <FaSearch className="text-gray-300 mr-3" />
+                    </button>
+                </div>
 
-            {/* Género */}
-            <select
-                value={genre}
-                onChange={(e) => setGenre(e.target.value)}
-            >
-                <option value="">Genres</option>
-                {genres.map((genre) => (
-                <option key={genre} value={genre}>
-                    {genre}
-                </option>
-                ))}
-            </select>
+                {/* Género */}
+                <select
+                    value={genre}
+                    onChange={(e) => setGenre(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                >
+                    <option value="">All Genres</option>
+                    {genres.map((genre) => (
+                    <option key={genre} value={genre}>
+                        {genre}
+                    </option>
+                    ))}
+                </select>
 
-            {/* Año de emisión */}
-            <select
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-            >
-                <option value="">Year</option>
-                {YEARS.map((year) => (
-                <option key={year} value={year}>
-                    {year}
-                </option>
-                ))}
-            </select>
+                {/* Año de emisión */}
+                <select
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                >
+                    <option value="">All Years</option>
+                    {YEARS.map((year) => (
+                    <option key={year} value={year}>
+                        {year}
+                    </option>
+                    ))}
+                </select>
 
-            {/* Estado de emisión */}
-            <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-            >
-                <option value="">Airing Status</option>
-                {MEDIA_STATUS.map(({ name, value }) => (
-                <option key={value} value={value}>
-                    {name}
-                </option>
-                ))}
-            </select>
+                {/* Estado de emisión */}
+                <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                >
+                    <option value="">All Status</option>
+                    {MEDIA_STATUS.map(({ name, value }) => (
+                    <option key={value} value={value}>
+                        {name}
+                    </option>
+                    ))}
+                </select>
 
-            {/* Temporada de emisión */}
-            <select
-                value={season}
-                onChange={(e) => setSeason(e.target.value)}
-            >
-                <option value="">Season</option>
-                {MEDIA_SEASON.map((season) => (
-                <option key={season} value={season}>
-                    {season}
-                </option>
-                ))}
-            </select>
+                {/* Temporada de emisión */}
+                <select
+                    value={season}
+                    onChange={(e) => setSeason(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                >
+                    <option value="">All Seasons</option>
+                    {MEDIA_SEASON.map((season) => (
+                    <option key={season} value={season}>
+                        {season}
+                    </option>
+                    ))}
+                </select>
 
-            {/* Botón de búsqueda */}
-            <button onClick={handleSearch}>Search</button>
+                {/* Botón de búsqueda */}
+                <button 
+                    onClick={handleSearch}
+                    className="w-full md:w-auto px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors shadow-md"
+                >
+                    Filter
+                </button>
+            </div>
 
             {/* Mostrar filtros seleccionados */}
-            <div className="flex flex-wrap gap-2">
+            {(search || genre || year || status || season) && (
+            <div className="flex flex-wrap items-center gap-3 mt-4">
+                <span className="text-gray-400">Selected filters:</span>
                 {search && (
-                <div className="text-white">
+                <div className="flex items-center text-purple-400">
                     <span>Search: {search}</span>
                     <button
-                    onClick={() => handleClearFilter('search')}
-                    className="ml-2 text-red-500 hover:text-red-700"
+                        onClick={() => handleClearFilter('search')}
+                        className="ml-2 text-gray-400 hover:text-red-400"
+                        aria-label="Remove search filter"
                     >
-                    &times;
+                        ×
                     </button>
                 </div>
                 )}
                 {genre && (
-                <div className="text-white">
+                <div className="flex items-center text-blue-400">
                     <span>Genre: {genre}</span>
                     <button
-                    onClick={() => handleClearFilter('genre')}
-                    className="ml-2 text-red-500 hover:text-red-700"
+                        onClick={() => handleClearFilter('genre')}
+                        className="ml-2 text-gray-400 hover:text-red-400"
+                        aria-label="Remove genre filter"
                     >
-                    &times;
+                        ×
                     </button>
                 </div>
                 )}
                 {year && (
-                <div className="text-white">
+                <div className="flex items-center text-green-400">
                     <span>Year: {year}</span>
                     <button
-                    onClick={() => handleClearFilter('year')}
-                    className="ml-2 text-red-500 hover:text-red-700"
+                        onClick={() => handleClearFilter('year')}
+                        className="ml-2 text-gray-400 hover:text-red-400"
+                        aria-label="Remove year filter"
                     >
-                    &times;
+                        ×
                     </button>
                 </div>
                 )}
                 {status && (
-                <div className="text-white">
+                <div className="flex items-center text-red-400">
                     <span>Status: {status}</span>
                     <button
-                    onClick={() => handleClearFilter('status')}
-                    className="ml-2 text-red-500 hover:text-red-700"
+                        onClick={() => handleClearFilter('status')}
+                        className="ml-2 text-gray-400 hover:text-red-400"
+                        aria-label="Remove status filter"
                     >
-                    &times;
+                        ×
                     </button>
                 </div>
                 )}
                 {season && (
-                <div className="text-white">
+                <div className="flex items-center text-yellow-400">
                     <span>Season: {season}</span>
                     <button
                         onClick={() => handleClearFilter('season')}
-                        className="ml-2 text-red-500 hover:text-red-700"
-                        >
-                        &times;
+                        className="ml-2 text-gray-400 hover:text-red-400"
+                        aria-label="Remove season filter"
+                    >
+                        ×
                     </button>
                 </div>
                 )}
+                <button
+                    onClick={handleClearAll}
+                    className="ml-auto text-sm text-gray-400 hover:text-white border border-gray-600 px-2 py-1 rounded hover:border-white transition-colors"
+                >
+                    Clean All
+                </button>
             </div>
+            )}
         </div>
+        
     );
 };
 

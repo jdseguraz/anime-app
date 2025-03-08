@@ -5,6 +5,9 @@ import { RootState } from '@/app/store/store';
 import AnimeCard from '@/app/components/AnimeCard';
 import { useEffect, useState } from 'react'; // Importa useEffect y useState
 import { GET_FAVORITE_ANIMES } from '@/app/lib/queries/animeQueries';
+import Loading from '@/app/components/Loading';
+import Image from 'next/image';
+import NoResults from '@/app/components/NoResults';
 
 export default function FavoritesPage() {
   const [isClient, setIsClient] = useState(false);
@@ -26,13 +29,13 @@ export default function FavoritesPage() {
   }
 
   if (loading || !isClient) {
-    return <p>Cargando...</p>;
+    return <Loading/>;
   }
 
   const favoriteAnimes = data?.Page.media || [];
 
   return (
-    <div className="p-10 p-md-30">
+    <div>
       <h1 className="text-2xl font-bold mb-4">Your favorites</h1>
 
       {favoriteAnimes.length > 0 ? (
@@ -44,7 +47,7 @@ export default function FavoritesPage() {
           ))}
         </ul>
       ) : (
-        <p className="text-gray-600">No tienes animes favoritos aún.</p>
+        <NoResults text="No favorites yet!"/>
       )}
     </div>
   );

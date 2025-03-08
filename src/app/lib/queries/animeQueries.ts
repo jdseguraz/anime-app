@@ -116,3 +116,38 @@ export const GET_FAVORITE_ANIMES = gql`
     }
   }
 `;
+
+// Consulta GraphQL para obtener los detalles del anime
+export const GET_ANIME_DETAILS = gql`
+  query GetAnimeDetails($id: Int) {
+    Media(id: $id) {
+      id
+      bannerImage
+      coverImage {
+        extraLarge
+      }
+      title {
+        english
+        native
+      }
+      description
+      episodes
+      popularity
+      status
+      startDate {
+        day
+        month
+        year
+      }
+      endDate {
+        day
+        month
+        year
+      }
+      trailer {
+        site
+        id
+      }
+    }
+  }
+`;

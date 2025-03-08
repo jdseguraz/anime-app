@@ -18,3 +18,9 @@ export const getYears = () => {
     const currentYear = new Date().getFullYear();
     return Array.from({ length: currentYear - 1999 }, (_, i) => 2000 + i).reverse();
 };
+
+export const formatStatus = (status: string) => {
+    if (!status) return 'N/A';
+    const withSpaces = status.replace(/[\*_]/g, ' ');
+    return withSpaces.toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
+};

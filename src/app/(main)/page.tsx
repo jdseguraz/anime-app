@@ -12,9 +12,13 @@ import { GET_ANIMES, GET_POPULAR_THIS_SEASON, GET_POPULAR_ALL_TIME } from '../li
 import Filters from '../components/Filters';
 import AnimeCard from '../components/AnimeCard';
 import AnimeModal from '../components/AnimeModal';
+import Loading from '../components/Loading';
+import NoResults from '../components/NoResults';
 
 /* utils */
 import { getCurrentSeason } from '../lib/utils/utils';
+
+
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -69,10 +73,11 @@ export default function Home() {
   };
 
   return (
-    <div className="p-10 p-md-30">
+    <div>
       <Filters />
+      <hr className='my-5 bg-gray-400 text-black opacity-5'/>
       {filteredLoading || popularThisSeasonLoading || popularAllTimeLoading ? (
-        <p>Cargando...</p>
+        <Loading/>
       ) : (
         <>
           {/* Mostrar resultados filtrados si hay filtros */}
@@ -80,7 +85,7 @@ export default function Home() {
             <div>
               <h2 className="text-2xl font-bold mb-4">Results:</h2>
               {filteredData?.Page.media.length === 0 ? ( // Verificar si no hay resultados
-                <p className="text-gray-600">No Results for your filters</p>
+                <NoResults text="No Results for your filters"/>
               ) : (
                 <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
                   {filteredData?.Page.media.map((anime) => (

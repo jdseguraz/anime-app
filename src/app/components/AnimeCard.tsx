@@ -1,6 +1,7 @@
 'use client';
 import { useDispatch } from 'react-redux';
 import { toggleFavorite } from '../store/slices/favoritesSlices';
+import { FaHeart, FaRegHeart } from 'react-icons/fa'; 
 
 interface AnimeCardProps {
   anime: {
@@ -40,13 +41,13 @@ export default function AnimeCard({ anime, isFavorite }: AnimeCardProps) {
         {/* Botón de favoritos */}
         <button
           onClick={handleToggleFavorite}
-          className={`mt-2 px-4 py-2 rounded-lg ${
-            isFavorite
-              ? 'bg-red-500 hover:bg-red-600'
-              : 'bg-blue-500 hover:bg-blue-600'
-          } text-white`}
+          className="mt-2 p-2 rounded-full hover:bg-red-300 transition-colors cursor-alias"
         >
-          {isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+          {isFavorite ? (
+            <FaHeart className="text-red-500 text-xl" /> // Corazón lleno
+          ) : (
+            <FaRegHeart className="text-red-500 text-xl" /> // Corazón vacío
+          )}
         </button>
       </div>
     </div>
