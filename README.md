@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anime App
 
-## Getting Started
+Este es un proyecto de front-end construido con React, Next.js, TypeScript, TailwindCSS y Redux. La aplicación permite buscar animes utilizando una API de GraphQL, filtrar los resultados, ver detalles de cada anime y marcar animes como favoritos. Los favoritos persisten incluso después de refrescar la página.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Requisitos
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (v18 o superior)
+- npm (v9 o superior)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Instalación
 
-## Learn More
+Sigue estos pasos para instalar y ejecutar el proyecto en tu máquina local:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clona el repositorio:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   git clone https://github.com/jdseguraz/anime-app.git
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Navega al directorio del proyecto:**
 
-## Deploy on Vercel
+   ```bash
+   cd anime-app
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Instala las dependencias:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm install
+
+3. **Ejecuta el servidor de desarrollo:**
+
+   ```bash
+    npm run dev
+
+
+# Tecnologías Utilizadas
+
+React: Biblioteca de JavaScript para construir interfaces de usuario.
+Next.js: Framework de React para renderizado del lado del servidor y generación de sitios estáticos.
+TypeScript: Superset de JavaScript que añade tipos estáticos.
+TailwindCSS: Framework de CSS utilitario para diseñar interfaces rápidamente.
+Redux: Biblioteca de gestión de estado para aplicaciones JavaScript.
+Apollo Client: Biblioteca para manejar consultas GraphQL en el front-end.
+
+# Ejecución de Pruebas
+
+1. **Para ejecutar las pruebas unitarias, utiliza el siguiente comando:**
+
+    ```bash
+    npm test
+
+
+2. **Si deseas ejecutar las pruebas en modo de observación (watch mode), puedes usar:**
+
+    ```bash
+    npm run test:watch
+
