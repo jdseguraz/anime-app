@@ -3,7 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from './lib/apolloClient';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-import FloatingButton from './components/FloattingButton'
+import FloatingButton from './components/FloatingButton'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
