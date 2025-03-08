@@ -2,6 +2,7 @@
 import { useDispatch } from 'react-redux';
 import { toggleFavorite } from '../store/slices/favoritesSlices';
 import { FaHeart, FaRegHeart } from 'react-icons/fa'; 
+import Image from 'next/image';
 
 interface AnimeCardProps {
   anime: {
@@ -27,11 +28,12 @@ export default function AnimeCard({ anime, isFavorite }: AnimeCardProps) {
 
   return (
     <div className="cursor-pointer">
-      <div className="w-full">
-        <img
-          src={anime.coverImage.extraLarge || '/default-banner.jpg'}
-          alt={anime.title.english || 'Anime banner'}
-          className="w-full h-48 object-cover"
+      <div className="w-full h-60 relative overflow-hidden rounded-md">
+        <Image
+          src={anime.coverImage.extraLarge}
+          alt={anime.title.english || anime.title.native}
+          fill // Hace que la imagen ocupe todo el espacio del contenedor
+          className="object-cover" // Ajusta la imagen para cubrir el contenedor
         />
       </div>
       <div className="p-4">

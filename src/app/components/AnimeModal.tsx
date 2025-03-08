@@ -7,9 +7,10 @@ import { toggleFavorite } from '../store/slices/favoritesSlices';
 import { GET_ANIME_DETAILS } from '../lib/queries/animeQueries';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { formatStatus } from '../lib/utils/utils';
 import Loading from './Loading';
+import Image from 'next/image';
 
 interface AnimeModalProps {
   animeId: number;
@@ -35,11 +36,11 @@ export default function AnimeModal({ animeId, onClose }: AnimeModalProps) {
   });
 
   // Handler para cerrar el modal al hacer click fuera de él
-  const handleOutsideClick = (e: MouseEvent) => {
+  const handleOutsideClick = useCallback((e: MouseEvent) => {
     if (modalContentRef.current && !modalContentRef.current.contains(e.target as Node)) {
       onClose();
     }
-  };
+  }, [onClose]);
 
   // Configurar el event listener al montar el componente
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function AnimeModal({ animeId, onClose }: AnimeModalProps) {
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, []);
+  }, [handleOutsideClick]);
 
   // Formatear fecha
   const formatDate = (date: DateObject): string  => {
@@ -100,10 +101,11 @@ export default function AnimeModal({ animeId, onClose }: AnimeModalProps) {
         <div className="relative">
           <div className="w-full h-64 bg-gray-200">
             {anime.bannerImage ? (
-              <img
+              <Image
                 src={anime.bannerImage}
                 alt={anime.title.english || anime.title.native}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
