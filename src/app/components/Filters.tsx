@@ -119,6 +119,20 @@ const Filters = () => {
                     </button>
                 </div>
 
+                {/* Estado de emisión */}
+                <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                >
+                    <option value="">All Status</option>
+                    {MEDIA_STATUS.map(({ name, value }) => (
+                    <option key={value} value={value}>
+                        {name}
+                    </option>
+                    ))}
+                </select>
+
                 {/* Género */}
                 <select
                     value={genre}
@@ -126,7 +140,7 @@ const Filters = () => {
                     className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 >
                     <option value="">All Genres</option>
-                    {genres.map((genre) => (
+                    {genres.map((genre: string) => (
                     <option key={genre} value={genre}>
                         {genre}
                     </option>
@@ -143,20 +157,6 @@ const Filters = () => {
                     {YEARS.map((year) => (
                     <option key={year} value={year}>
                         {year}
-                    </option>
-                    ))}
-                </select>
-
-                {/* Estado de emisión */}
-                <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                    className="w-full md:w-auto px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                >
-                    <option value="">All Status</option>
-                    {MEDIA_STATUS.map(({ name, value }) => (
-                    <option key={value} value={value}>
-                        {name}
                     </option>
                     ))}
                 </select>

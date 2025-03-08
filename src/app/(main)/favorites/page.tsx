@@ -6,8 +6,8 @@ import AnimeCard from '@/app/components/AnimeCard';
 import { useEffect, useState } from 'react'; // Importa useEffect y useState
 import { GET_FAVORITE_ANIMES } from '@/app/lib/queries/animeQueries';
 import Loading from '@/app/components/Loading';
-import Image from 'next/image';
 import NoResults from '@/app/components/NoResults';
+import { Anime } from '@/app/types/anime';
 
 export default function FavoritesPage() {
   const [isClient, setIsClient] = useState(false);
@@ -40,7 +40,7 @@ export default function FavoritesPage() {
 
       {favoriteAnimes.length > 0 ? (
         <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {favoriteAnimes.map((anime) => (
+          {favoriteAnimes.map((anime: Anime) => (
             <li key={anime.id}>
               <AnimeCard anime={anime} isFavorite={true} />
             </li>

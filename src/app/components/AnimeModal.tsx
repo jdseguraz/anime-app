@@ -16,6 +16,13 @@ interface AnimeModalProps {
   onClose: () => void;
 }
 
+type DateObject = {
+  year?: number;
+  month?: number;
+  day?: number;
+};
+
+
 export default function AnimeModal({ animeId, onClose }: AnimeModalProps) {
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.favorites.favorites);
@@ -43,7 +50,7 @@ export default function AnimeModal({ animeId, onClose }: AnimeModalProps) {
   }, []);
 
   // Formatear fecha
-  const formatDate = (date) => {
+  const formatDate = (date: DateObject): string  => {
     if (!date || !date.year) return 'N/A';
     return `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
   };

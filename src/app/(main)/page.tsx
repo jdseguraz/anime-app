@@ -17,6 +17,7 @@ import NoResults from '../components/NoResults';
 
 /* utils */
 import { getCurrentSeason } from '../lib/utils/utils';
+import { Anime } from '../types/anime';
 
 
 
@@ -32,7 +33,7 @@ export default function Home() {
   const season = searchParams.get('season');
 
   // Estado para el modal
-  const [selectedAnimeId, setSelectedAnimeId] = useState<null | any>(null);
+  const [selectedAnimeId, setSelectedAnimeId] = useState<null | number>(null);
 
   // Obtener la temporada y el año actuales
   const { season: currentSeason, year: currentYear } = getCurrentSeason();
@@ -88,7 +89,7 @@ export default function Home() {
                 <NoResults text="No Results for your filters"/>
               ) : (
                 <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                  {filteredData?.Page.media.map((anime) => (
+                  {filteredData?.Page.media.map((anime: Anime) => (
                     <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
                       <AnimeCard key={anime.id} anime={anime} isFavorite={favorites.includes(anime.id)} />
                     </li>
@@ -103,7 +104,7 @@ export default function Home() {
             <div className="mt-8">
               <h2 className="text-2xl font-bold mb-4">POPULAR THIS SEASON ({currentSeason} {currentYear})</h2>
               <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                {popularThisSeasonData?.Page.media.map((anime) => (
+                {popularThisSeasonData?.Page.media.map((anime: Anime) => (
                   <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
                     <AnimeCard key={anime.id} anime={anime} isFavorite={favorites.includes(anime.id)} />
                   </li>
@@ -117,7 +118,7 @@ export default function Home() {
             <div className="mt-8">
               <h2 className="text-2xl font-bold mb-4">ALL TIME POPULAR </h2>
               <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-                {popularAllTimeData?.Page.media.map((anime) => (
+                {popularAllTimeData?.Page.media.map((anime: Anime) => (
                   <li key={anime.id} onClick={() => handleOpenModal(anime.id)}>
                     <AnimeCard key={anime.id} anime={anime} isFavorite={favorites.includes(anime.id)} />
                   </li>
